@@ -24,23 +24,11 @@ export const carController = {
     }
   },
 
-  //   async findByModel(req: Request, res: Response): Promise<Response> {
-  //     try {
-  //       const { name } = req.params;
-  //       let cars = await CarModel.find();
-
-  //       return res.status(200).json(car);
-  //     } catch (err) {
-  //       console.log(err);
-  //       return res.status(500).json(err);
-  //     }
-  //   },
-
   async create(req: Request, res: Response): Promise<Response> {
     try {
       let car = await CarModel.create(req.body);
 
-      return res.status(200).json(car);
+      return res.status(201).json(car);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);

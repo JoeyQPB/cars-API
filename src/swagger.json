@@ -1,0 +1,258 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Cars API Documantation",
+    "description": "In this documantation you will be able to consult the API end-points and also test all availblw routes.",
+    "contact": {
+      "email": "joey_qpb@hotmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "serves": [
+    {
+      "url": "http://localhost:3333/",
+      "description": "Local Server"
+    }
+  ],
+  "paths": {
+    "/cars": {
+      "get": {
+        "summary": "get all cars",
+        "tags": ["/cars"],
+        "description": "this route gives you access to all cars",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/cars"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "API error"
+          }
+        }
+      }
+    },
+    "/car/{id}": {
+      "get": {
+        "summary": "get a car",
+        "tags": ["/cars"],
+        "description": "this route gives you access to a car",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "car id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/cars"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not found"
+          },
+          "500": {
+            "description": "API error"
+          }
+        }
+      }
+    },
+    "/create_car": {
+      "post": {
+        "summary": "Create new car",
+        "tags": ["/cars"],
+        "description": "it will be responsible for creating a new car",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/cars"
+              },
+              "examples": {
+                "New Car": {
+                  "value": {
+                    "name": "super car",
+                    "model": "model s",
+                    "brand": "tesla",
+                    "version": "2.0",
+                    "year": 2021,
+                    "mileage": 220,
+                    "isAutomatic": true,
+                    "priceToSell": 44000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "car created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/cars"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "API error"
+          }
+        }
+      }
+    },
+    "/edit_car/{id}": {
+      "put": {
+        "summary": "edit car",
+        "tags": ["/cars"],
+        "description": "this route allows a root to change the specific car registered in the database",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "car id",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/cars"
+              },
+              "examples": {
+                "New Car": {
+                  "value": {
+                    "name": "new data",
+                    "model": "new data",
+                    "brand": "new data",
+                    "version": "new data",
+                    "year": 40000,
+                    "mileage": 40000,
+                    "isAutomatic": true,
+                    "priceToSell": 40000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "car edited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/cars"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "API error"
+          }
+        }
+      }
+    },
+    "/delete_car/{id}": {
+      "delete": {
+        "summary": "delete car",
+        "tags": ["/cars"],
+        "description": "delete the specific car registered in the database",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "description": "car id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "car deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "acknowledged": true,
+                  "deletedCount": 1
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "API error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "cars": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "model": {
+            "type": "string",
+            "required": true
+          },
+          "brand": {
+            "type": "string",
+            "required": true
+          },
+          "version": {
+            "type": "string",
+            "trim": true,
+            "default": "1.0.0"
+          },
+          "year": {
+            "type": "number",
+            "require": true
+          },
+          "mileage": {
+            "type": "number",
+            "require": true
+          },
+          "isAutomatic": {
+            "type": "boolean",
+            "require": true
+          },
+          "priceToSell": {
+            "type": "number",
+            "require": true
+          },
+          "creatAt": {
+            "type": "string",
+            "default": "Date.now()"
+          }
+        }
+      }
+    }
+  }
+}
