@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const carSchema = new Schema(
   {
@@ -41,6 +41,10 @@ const carSchema = new Schema(
     creatAt: {
       type: Date,
       default: Date.now(),
+    },
+    creatBy: {
+      type: Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }

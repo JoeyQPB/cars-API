@@ -15,7 +15,7 @@
     }
   ],
   "paths": {
-    "/cars": {
+    "/cars/cars": {
       "get": {
         "summary": "get all cars",
         "tags": ["/cars"],
@@ -40,10 +40,11 @@
         }
       }
     },
-    "/car/{id}": {
+    "/cars/car/{id}": {
       "get": {
         "summary": "get a car",
         "tags": ["/cars"],
+        "security": [{ "bearerAuth": [] }],
         "description": "this route gives you access to a car",
         "parameters": [
           {
@@ -75,10 +76,11 @@
         }
       }
     },
-    "/create_car": {
+    "/cars/create_car": {
       "post": {
         "summary": "Create new car",
         "tags": ["/cars"],
+        "security": [{ "bearerAuth": [] }],
         "description": "it will be responsible for creating a new car",
         "requestBody": {
           "content": {
@@ -121,10 +123,11 @@
         }
       }
     },
-    "/edit_car/{id}": {
+    "/cars/edit_car/{id}": {
       "put": {
         "summary": "edit car",
         "tags": ["/cars"],
+        "security": [{ "bearerAuth": [] }],
         "description": "this route allows a root to change the specific car registered in the database",
         "parameters": [
           {
@@ -176,10 +179,11 @@
         }
       }
     },
-    "/delete_car/{id}": {
+    "/cars/delete_car/{id}": {
       "delete": {
         "summary": "delete car",
         "tags": ["/cars"],
+        "security": [{ "bearerAuth": [] }],
         "description": "delete the specific car registered in the database",
         "parameters": [
           {
@@ -201,6 +205,142 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "API error"
+          }
+        }
+      }
+    },
+    "/user/signup": {
+      "post": {
+        "summary": "Create new User",
+        "tags": ["/User"],
+        "description": "it will be responsible for creating a new USER",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "New User": {
+                  "value": {
+                    "name": "joey",
+                    "email": "joeytest@test.com",
+                    "role": "ADMIN",
+                    "password": "senha@Segura123!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (preencha todos os campos)"
+          },
+          "500": {
+            "description": "API error"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "login User",
+        "tags": ["/User"],
+        "description": "it will be responsible for login a user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "New User": {
+                  "value": {
+                    "email": "joeytest@test.com",
+                    "password": "senha@Segura123!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request (preencha todos os campos)"
+          },
+          "401": {
+            "description": "email ou senha invalidos"
+          },
+          "500": {
+            "description": "API error"
+          }
+        }
+      }
+    },
+    "/recuperar_senha": {
+      "post": {
+        "summary": "Recuperar Senha",
+        "tags": ["/Password"],
+        "description": "this route allows to receive a new one in his email",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "email": {
+                  "type": "string",
+                  "required": true,
+                  "uniqueItems": true
+                }
+              },
+              "examples": {
+                "email ex": {
+                  "value": {
+                    "email": "exemple@exemple.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Send Email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "menssage": { "type": "check your email" }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "email not found"
           },
           "500": {
             "description": "API error"
@@ -250,8 +390,63 @@
           "creatAt": {
             "type": "string",
             "default": "Date.now()"
+          },
+          "creatBy": {
+            "type": "Types.ObjectId"
           }
         }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "email": {
+            "type": "string",
+            "required": true
+          },
+          "passwordHash": { "type": "string", "required": true },
+          "role": {
+            "type": "string",
+            "enum": ["ADMIN", "USER"],
+            "default": "USER"
+          },
+          "creatAt": {
+            "type": "string",
+            "default": "Date.now()"
+          }
+        }
+      },
+      "UserResp": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "email": {
+            "type": "string",
+            "required": true
+          },
+          "role": {
+            "type": "string",
+            "enum": ["ADMIN", "USER"],
+            "default": "USER"
+          },
+          "creatAt": {
+            "type": "string",
+            "default": "Date.now()"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
